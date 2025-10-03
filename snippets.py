@@ -6,13 +6,14 @@ SNIPPETS = {
 
 It's crashing because you forgot to add a base case. This is like a guardrail to prevent your recursive calls from going forever.
 
-Let's say you make a call factorial(3).
-We'll call factorial(3 - 1)
-factorial(2 - 1)
-factorial(1 - 1)
-factorial(0 - 1)
-...
-and so on forever. Do you see the problem? We need to define where we should stop:
+Let's say you make a call `factorial(3)`. Without a base case, it will keep calling:
+- `factorial(3 - 1)` → `factorial(2)`
+- `factorial(2 - 1)` → `factorial(1)`
+- `factorial(1 - 1)` → `factorial(0)`
+- `factorial(0 - 1)` → `factorial(-1)`
+- ...and so on forever
+
+Do you see the problem? We need to define where we should stop:
 
 ```python
 def factorial(n):
