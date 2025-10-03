@@ -40,6 +40,48 @@ If they have both but seem confused about how it works: trust_recursion"""
     snippet_key = message.content[0].text.strip()
     return SNIPPETS.get(snippet_key, SNIPPETS["base_case"])
 
+def run_code(user_code):
+    """Execute user code and test against factorial test cases"""
+    test_cases = [(0, 1), (3, 6), (5, 120)]
+    results = []
+
+    try:
+        # Execute the user's code
+        local_scope = {}
+        exec(user_code, {}, local_scope)
+
+        # Check if factorial function exists
+        if 'factorial' not in local_scope:
+            return "❌ No function named 'factorial' found. Make sure to define `def factorial(n):`"
+
+        factorial = local_scope['factorial']
+
+        # Run test cases
+        all_passed = True
+        for n, expected in test_cases:
+            try:
+                result = factorial(n)
+                if result == expected:
+                    results.append(f"✅ factorial({n}) = {result}")
+                else:
+                    results.append(f"❌ factorial({n}) = {result}, expected {expected}")
+                    all_passed = False
+            except RecursionError:
+                results.append(f"❌ factorial({n}) caused infinite recursion (no base case?)")
+                all_passed = False
+                break
+            except Exception as e:
+                results.append(f"❌ factorial({n}) caused error: {str(e)}")
+                all_passed = False
+
+        if all_passed:
+            results.append("\n🎉 **All tests passed! You did it!**")
+
+        return "\n".join(results)
+
+    except Exception as e:
+        return f"❌ Error running code: {str(e)}"
+
 st.title("Learn Recursion by Doing")
 st.markdown("**Your goal:** Write a function `factorial(n)` that returns n!")
 
@@ -58,20 +100,28 @@ with col1:
         placeholder="def factorial(n):\n    # Your code here\n    pass"
     )
 
-    if st.button("I'm stuck! Help me"):
-        st.session_state.messages.append({
-            "role": "user",
-            "content": f"I'm stuck. Here's my code:\n```python\n{user_code}\n```"
-        })
+    col_a, col_b = st.columns(2)
 
-        # Get AI diagnosis and snippet
-        with st.spinner("Thinking..."):
-            snippet = diagnose_and_help(user_code)
+    with col_a:
+        if st.button("▶️ Run Code", use_container_width=True):
+            result = run_code(user_code)
+            st.markdown(result)
+
+    with col_b:
+        if st.button("💡 I'm stuck! Help me", use_container_width=True):
             st.session_state.messages.append({
-                "role": "assistant",
-                "content": snippet
+                "role": "user",
+                "content": f"I'm stuck. Here's my code:\n```python\n{user_code}\n```"
             })
-        st.rerun()
+
+            # Get AI diagnosis and snippet
+            with st.spinner("Thinking..."):
+                snippet = diagnose_and_help(user_code)
+                st.session_state.messages.append({
+                    "role": "assistant",
+                    "content": snippet
+                })
+            st.rerun()
 
 with col2:
     st.subheader("AI Tutor")
