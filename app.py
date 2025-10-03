@@ -2,6 +2,7 @@ import streamlit as st
 from anthropic import Anthropic
 import os
 from snippets import SNIPPETS
+from code_editor import code_editor
 
 # Page config
 st.set_page_config(page_title="Learn Recursion", layout="wide")
@@ -94,11 +95,15 @@ col1, col2 = st.columns([1, 1])
 
 with col1:
     st.subheader("Your Code")
-    user_code = st.text_area(
-        "Write your factorial function here:",
+
+    editor_response = code_editor(
+        code="def factorial(n):\n    # Your code here\n    pass",
+        lang="python",
         height=300,
-        placeholder="def factorial(n):\n    # Your code here\n    pass"
+        theme="contrast"
     )
+
+    user_code = editor_response["text"] if editor_response else ""
 
     col_a, col_b = st.columns(2)
 
