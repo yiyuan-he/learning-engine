@@ -1,0 +1,143 @@
+:root {
+    --bg-primary: #f5f5f5;
+    --bg-secondary: #ffffff;
+    --bg-tertiary: #f9f9f9;
+    --bg-chat: #e3f2fd;
+    --bg-editor: #ffffff;
+    --text-primary: #333;
+    --text-secondary: #555;
+    --text-light: #000;
+    --border-color: #ddd;
+    --shadow: rgba(0,0,0,0.1);
+}
+
+[data-theme="dark"] {
+    --bg-primary: #1e1e1e;
+    --bg-secondary: #2d2d2d;
+    --bg-tertiary: #252525;
+    --bg-chat: #1a2332;
+    --bg-editor: #1e1e1e;
+    --text-primary: #ffffff;
+    --text-secondary: #b0b0b0;
+    --text-light: #e0e0e0;
+    --border-color: #3e3e3e;
+    --shadow: rgba(0,0,0,0.3);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: var(--bg-primary);
+    padding: 20px;
+    color: var(--text-light);
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    background-color: var(--bg-secondary);
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px var(--shadow);
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+header {
+    margin-bottom: 30px;
+}
+
+h1 {
+    color: var(--text-primary);
+    margin-bottom: 10px;
+    transition: color 0.3s;
+}
+
+h2 {
+    color: var(--text-secondary);
+    margin-bottom: 10px;
+    font-size: 18px;
+    transition: color 0.3s;
+}
+
+section {
+    margin-bottom: 30px;
+}
+
+#code-editor {
+    width: 100%;
+    padding: 15px;
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    background-color: var(--bg-editor);
+    color: var(--text-light);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    resize: vertical;
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+
+.button-section {
+    display: flex;
+    gap: 10px;
+}
+
+button {
+    padding: 12px 24px;
+    font-size: 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+#run-btn {
+    background-color: #4CAF50;
+    color: white;
+}
+
+#run-btn:hover {
+    background-color: #45a049;
+}
+
+#help-btn {
+    background-color: #2196f3;
+    color: white;
+}
+
+#help-btn:hover {
+    background-color: #0b7dda;
+}
+
+#theme-toggle {
+    padding: 8px 16px;
+    font-size: 20px;
+    background-color: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+#theme-toggle:hover {
+    opacity: 0.8;
+}
+
+#results, #chat {
+    padding: 15px;
+    background-color: var(--bg-tertiary);
+    color: var(--text-light);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    min-height: 100px;
+    white-space: pre-wrap;
+    font-family: 'Courier New', monospace;
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+
+#chat {
+    background-color: var(--bg-chat);
+}

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Learning Engine - Factorial</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+  <body>
+    <div class="container">
+      <header>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <h1>Learn Recursion: Factorial</h1>
+            <p>Write a recursive factorial function. Use the buttons below to test your code or get help!</p>
+          </div>
+          <button id="theme-toggle">🌙</button>
+        </div>
+      </header>
+
+      <main>
+        <section class="editor-section">
+          <h2>Your Code</h2>
+          <textarea id="code-editor" rows="15"></textarea>
+        </section>
+
+        <section class="button-section">
+          <button id="run-btn">Run Code</button>
+          <button id="help-btn">Get Help</button>
+        </section>
+
+        <section class="results-section">
+          <h2>Test Results</h2>
+          <div id="results"></div>
+        </section>
+
+        <section class="chat-section">
+          <h2>AI Tutor</h2>
+          <div id="chat"></div>
+        </section>
+      </main>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
