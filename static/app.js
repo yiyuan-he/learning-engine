@@ -3,6 +3,10 @@ const runBtn = document.getElementById('run-btn');
 const helpBtn = document.getElementById('help-btn');
 const resultsDiv = document.getElementById('results');
 const chatDiv = document.getElementById('chat');
+const reflectionSection = document.getElementById('reflection-section');
+const reflectionInput = document.getElementById('reflection-input');
+const submitReflectionBtn = document.getElementById('submit-reflection-btn');
+const reflectionFeedback = document.getElementById('reflection-feedback');
 
 codeEditor.value = `def factorial(n):
     # write your code here
@@ -24,6 +28,14 @@ runBtn.addEventListener('click', async () => {
 
         const data = await response.json();
         resultsDiv.textContent = data.result;
+
+        if (data.result.includes('All tests passed!')) {
+            reflectionSection.style.display = 'block';
+            reflectionInput.value = '';
+            reflectionFeedback.style.display = 'none';
+        } else {
+            reflectionSection.style.display = 'none';
+        }
     } catch (error) {
         resultsDiv.textContent = `Error: ${error.message}`;
     }
@@ -72,3 +84,31 @@ themeToggle.addEventListener('click', () => {
     localStorage.setItem('theme', next);
     themeToggle.textContent = next === 'dark' ? '☀️' : '🌙';
 });
+
+submitReflectionBtn.addEventListener('click', async () => {
+    const code = codeEditor.value;
+    const explanation = reflectionInput.value.trim();
+
+    if (!explanation) {
+        alert('Please write an explanation first!');
+        return;
+    }
+
+    reflectionFeedback.textContent = 'AI is evaluating your explanation...';
+    reflectionFeedback.style.display = 'block';
+
+    try {
+        const response = await fetch('/api/reflect', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ code, explanation })
+        });
+
+        const data = await response.json();
+        reflectionFeedback.textContent = data.feedback;
+    } catch (error) {
+        reflectionFeedback.textContent = `Error: ${error.message}`;
+    }
+})

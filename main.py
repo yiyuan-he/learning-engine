@@ -40,7 +40,7 @@ async def execute_student_code(code: str) -> dict[str, Any]:
                     all_passed = False
 
             if all_passed:
-                results.append("\n All tests passed!")
+                results.append("\nAll tests passed!")
 
         return {
             "content": [{
@@ -125,3 +125,46 @@ async def help(request: CodeRequest):
                 final_result = message.result
 
         return {"response": final_result if final_result else "Sorry, I couldn't generate a response."}
+
+class ReflectionRequest(BaseModel):
+    code: str
+    explanation: str
+
+@app.post("/api/reflect")
+async def reflect(request: ReflectionRequest):
+    """Evaluate student's explanation of their solution"""
+    options = ClaudeAgentOptions(
+        system_prompt="""You are evaluating a student's understanding of their recursive factorial solution.
+
+        Your job:
+        1. Analyze their explanation for understanding of:
+            - Base case (when recursion stops)
+            - Recursive case (how it breaks down the problem)
+            - How the results combine
+
+        2. Respond with either:
+            - If they show strong understanding: Praise them briefly, then give a challenge problem
+            - If they have gaps: Ask a targeted follow-up question to address the gap
+
+        Keep responses to 2-3 sentences. Be encouraging but push them to think deeper.
+        """
+    )
+
+    async with ClaudeSDKClient(options=options) as client:
+        await client.query(
+        f"""The student solved factorial with this code:
+        ```python
+        {request.code}
+
+        Their explanation: "{request.explanation}"
+
+        Evaluate their understanding and respond appropriately.
+        """
+        )
+
+        final_result = None
+        async for message in client.receive_response():
+            if hasattr(message, 'result'):
+                final_result = message.result
+
+    return {"feedback": final_result if final_result else "Sorry, I couldn't evaluate your explanation."}
